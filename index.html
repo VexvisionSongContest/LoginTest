@@ -22,40 +22,47 @@
     <div id="message"></div>
 
     <script>
-        const SUPABASE_URL = 'https://xjxwniomwrtcisayoeyj.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeHduaW9td3J0Y2lzYXlvZXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0Mjc2NDMsImV4cCI6MjA5ODAwMzY0M30.6K-ViMwz2--e9TZ8QnX6xsXk8_r_4gbUtxEyxFgvIA0';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        const msgDiv = document.getElementById('message');
+    // 1. Initialize Supabase exactly once
+    const SUPABASE_URL = 'https://xjxwniomwrtcisayoeyj.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeHduaW9td3J0Y2lzYXlvZXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0Mjc2NDMsImV4cCI6MjA5ODAwMzY0M30.6K-ViMwz2--e9TZ8QnX6xsXk8_r_4gbUtxEyxFgvIA0';
+    
+    // Check if it's already initialized to avoid the error
+    const supabase = window.supabase ? window.supabase : supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        async function signUp() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            const { error } = await supabase.auth.signUp({ email, password });
-            
-            if (error) {
-                msgDiv.style.color = 'red';
-                msgDiv.innerText = error.message;
-            } else {
-                msgDiv.style.color = 'green';
-                msgDiv.innerText = 'Success! Check your email to verify your account.';
-            }
-        }
+    const msgDiv = document.getElementById('message');
 
-        async function signIn() {
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            
-            const { error } = await supabase.auth.signInWithPassword({ email, password });
-            
-            if (error) {
-                msgDiv.style.color = 'red';
-                msgDiv.innerText = error.message;
-            } else {
-                msgDiv.style.color = 'green';
-                msgDiv.innerText = 'Success! You are now logged in.';
-            }
+    // 2. Define signUp
+    async function signUp() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        const { error } = await supabase.auth.signUp({ email, password });
+        
+        if (error) {
+            msgDiv.style.color = 'red';
+            msgDiv.innerText = error.message;
+        } else {
+            msgDiv.style.color = 'green';
+            msgDiv.innerText = 'Success! Check your email to verify.';
         }
-    </script>
+    }
+
+    // 3. Define signIn
+    async function signIn() {
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        
+        if (error) {
+            msgDiv.style.color = 'red';
+            msgDiv.innerText = error.message;
+        } else {
+            msgDiv.style.color = 'green';
+            msgDiv.innerText = 'Success! You are logged in.';
+        }
+    }
+</script>
+
 </body>
 </html>
