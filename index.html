@@ -8,6 +8,7 @@
         body { font-family: sans-serif; display: flex; flex-direction: column; align-items: center; padding-top: 50px; }
         input { display: block; margin: 10px; padding: 8px; width: 250px; }
         button { padding: 8px 20px; cursor: pointer; }
+        #message { margin-top: 20px; font-weight: bold; color: green; }
     </style>
 </head>
 <body>
@@ -18,32 +19,42 @@
     <button onclick="signUp()">Sign Up</button>
     <button onclick="signIn()">Sign In</button>
 
-    <script>
-        // 1. Initialize Supabase
-        const SUPABASE_URL = 'YOUR_PROJECT_URL_HERE';
-        const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY_HERE';
-        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    <div id="message"></div>
 
-        // 2. Sign Up function
+    <script>
+        const SUPABASE_URL = 'https://xjxwniomwrtcisayoeyj.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqeHduaW9td3J0Y2lzYXlvZXlqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0Mjc2NDMsImV4cCI6MjA5ODAwMzY0M30.6K-ViMwz2--e9TZ8QnX6xsXk8_r_4gbUtxEyxFgvIA0';
+        const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        const msgDiv = document.getElementById('message');
+
         async function signUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            const { data, error } = await supabase.auth.signUp({ email, password });
+            const { error } = await supabase.auth.signUp({ email, password });
             
-            if (error) alert(error.message);
-            else alert('Check your email for the verification link!');
+            if (error) {
+                msgDiv.style.color = 'red';
+                msgDiv.innerText = error.message;
+            } else {
+                msgDiv.style.color = 'green';
+                msgDiv.innerText = 'Success! Check your email to verify your account.';
+            }
         }
 
-        // 3. Sign In function
         async function signIn() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             
-            const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+            const { error } = await supabase.auth.signInWithPassword({ email, password });
             
-            if (error) alert(error.message);
-            else alert('Login successful!');
+            if (error) {
+                msgDiv.style.color = 'red';
+                msgDiv.innerText = error.message;
+            } else {
+                msgDiv.style.color = 'green';
+                msgDiv.innerText = 'Success! You are now logged in.';
+            }
         }
     </script>
 </body>
